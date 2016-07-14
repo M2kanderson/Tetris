@@ -1,0 +1,94 @@
+html, body, figure, figcaption, ul, li, h1 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  text-align: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 60px;
+  margin: 30px;
+}
+
+figure {
+  display: inline-block;
+  border: 10px solid black;
+}
+
+ul:after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
+li {
+  border: 1px solid gray;
+  float: left;
+  width: 20px;
+  height: 20px;
+}
+
+.game-view{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-over{
+  display: none;
+}
+.show{
+  display: block;
+}
+
+.side-view{
+  width: 100px;
+  height: 460px;
+  background: black;
+}
+
+.red {
+  border: 1px solid black;
+  background: red;
+}
+
+.green {
+  border: 1px solid black;
+  background: green;
+}
+
+.blue {
+  border: 1px solid black;
+  background: blue;
+}
+
+.light-blue{
+  border: 1px solid black;
+  background: lightblue;
+}
+
+.yellow{
+  border: 1px solid black;
+  background: yellow;
+}
+
+.purple{
+  border: 1px solid black;
+  background: purple;
+}
+
+.orange{
+  border: 1px solid black;
+  background: orange;
+}
