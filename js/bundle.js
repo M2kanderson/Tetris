@@ -45,10 +45,34 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const GameView = __webpack_require__(1);
+	const BlockView = __webpack_require__(5);
+	const Tetramino = __webpack_require__(3);
+	
+	const Tetris = function(rootEl, blockEl){
+	  this.gameView = new GameView(rootEl, this);
+	  this.blockView = new BlockView(blockEl);
+	  this.currentTetramino = new Tetramino(this.gameView.board);
+	  this.nextTetramino = new Tetramino(this.gameView.board);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	};
+	
+	Tetris.prototype.newTetramino = function(){
+	  let newTetramino = new Tetramino(this.gameView.board);
+	  this.gameView.board.checkGameOver(newTetramino);
+	  if(!this.gameView.board.gameOver){
+	    this.currentTetramino = this.nextTetramino;
+	    this.nextTetramino = newTetramino;
+	  }
+	
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	};
 	
 	$(function(){
 	  const rootEl = $('.tetris-game');
-	  new GameView(rootEl);
+	  const blockEl = $('.next-blocks');
+	  new Tetris(rootEl, blockEl);
 	});
 
 
@@ -60,17 +84,19 @@
 	
 	
 	
-	const GameView = function($el){
+	const GameView = function($el, game){
 	  this.$el = $el;
-	  this.board = new Board(10, 20);
+	  this.game = game;
+	  this.board = new Board(10, 20, game);
 	  this.setupGrid();
+	  this.paused = false;
 	
 	  this.intervalId = window.setInterval(
 	  this.step.bind(this),
 	  GameView.STEP_MILLIS
 	  );
-	
 	  $(window).on("keydown", this.handleKeyEvent.bind(this));
+	  $(window).on("keyup", this.handleKeyUpEvent.bind(this));
 	};
 	
 	GameView.STEP_MILLIS = 200;
@@ -93,6 +119,8 @@
 	  // console.log(this.board.gameOver());
 	  if(this.board.gameOver){
 	    window.clearInterval(this.intervalId);
+	    window.clearInterval(this.downIntervalId);
+	    this.downIntervalId = null;
 	    $(".game-over").addClass("show");
 	  }
 	
@@ -110,25 +138,77 @@
 	  this.updateClasses();
 	};
 	
+	// GameView.prototype.newTetramino = function(){
+	//   this.game.newTetramino();
+	// };
+	
 	GameView.KEYS = {
 	  37: "left",
 	  39: "right",
 	  38: "rotate",
-	  40: "down"
+	  40: "down",
+	  80: "pause"
+	};
+	
+	GameView.prototype.handleKeyUpEvent = function(event){
+	  switch (GameView.KEYS[event.keyCode]) {
+	  case "down":
+	    window.clearInterval(this.downIntervalId);
+	    this.downIntervalId = null;
+	    break;
+	  }
+	};
+	
+	GameView.prototype.togglePause = function(){
+	  if(this.intervalId){
+	    window.clearInterval(this.intervalId);
+	    this.intervalId = null;
+	    this.paused = true;
+	    $(".pause-menu").addClass('show');
+	  }else {
+	    this.intervalId = window.setInterval(
+	    this.step.bind(this),
+	    GameView.STEP_MILLIS
+	    );
+	    this.paused = false;
+	    $(".pause-menu").removeClass('show');
+	  }
 	};
 	
 	GameView.prototype.handleKeyEvent = function(event){
 	  switch (GameView.KEYS[event.keyCode]) {
 	    case "left":
-	      this.board.tetramino.move([0,-1]);
-	      this.render([0,-1]);
+	      event.preventDefault();
+	      if(!this.paused){
+	        this.board.tetramino.move([0,-1]);
+	        this.render([0,-1]);
+	      }
 	      break;
 	    case "right":
-	      this.board.tetramino.move([0,1]);
-	      this.render([0,1]);
+	      event.preventDefault();
+	      if(!this.paused){
+	        this.board.tetramino.move([0,1]);
+	        this.render([0,1]);
+	      }
 	      break;
 	    case "rotate":
-	      this.board.tetramino.rotate();
+	      event.preventDefault();
+	      if(!this.paused){
+	        this.board.tetramino.rotate();
+	      }
+	      break;
+	    case "down":
+	      event.preventDefault();
+	      if(!this.downIntervalId && !this.board.gameOver && !this.paused){
+	        this.downIntervalId = window.setInterval(
+	        this.step.bind(this),
+	        50
+	        );
+	      }
+	      break;
+	    case "pause":
+	      this.togglePause();
+	
 	      break;
 	
 	  }
@@ -143,6 +223,7 @@
 
 	const Tetramino = __webpack_require__(3);
 	const Block = __webpack_require__(4);
+	const BlockView = __webpack_require__(5);
 	
 	const createBoard = function(width, height){
 	  let grid = new Array(height);
@@ -157,9 +238,10 @@
 	  return grid;
 	};
 	
-	const Board = function(width, height){
+	const Board = function(width, height, game){
 	  this.width = width;
 	  this.height = height;
+	  this.game = game;
 	  this.blocks = [];
 	  this.score = 0;
 	  $(".score").text(this.score);
@@ -272,11 +354,8 @@
 	  });
 	  this.score += 100*rowsEliminated*rowsEliminated;
 	  $('.score').text(this.score);
-	  let newTetramino = new Tetramino(this);
-	  this.checkGameOver(newTetramino);
-	  if(!this.gameOver){
-	    this.tetramino = new Tetramino(this);
-	  }
+	  this.game.newTetramino();
+	
 	};
 	
 	module.exports = Board;
@@ -451,6 +530,52 @@
 	};
 	
 	module.exports = Block;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	
+	
+	const BlockView = function($el){
+	  this.$el = $el;
+	  this.setupGrid();
+	  this.blocks = [];
+	};
+	
+	BlockView.prototype.setupGrid = function(){
+	  let html = "";
+	  for(let i = 0; i< 4; i++){
+	    html += "<ul>";
+	    for(let j = 0; j < 4; j++){
+	      html += "<li class='next-block'></li>";
+	    }
+	    html += "</ul>";
+	  }
+	
+	  this.$el.html(html);
+	  this.$li = this.$el.find("li");
+	};
+	
+	BlockView.prototype.render = function(blocks){
+	  let $li = this.$li;
+	  blocks.forEach((block) => {
+	    let pos = block.pos;
+	    let color = block.color;
+	    const flatCoord = (pos[0] * 4) + pos[1];
+	    $li.eq(flatCoord).addClass(color);
+	
+	  });
+	};
+	
+	BlockView.prototype.updateView = function(blocks) {
+	  this.$li.removeClass();
+	  this.render(blocks);
+	
+	};
+	
+	module.exports = BlockView;
 
 
 /***/ }

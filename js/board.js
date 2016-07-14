@@ -1,5 +1,6 @@
 const Tetramino = require('./tetramino');
 const Block = require('./block');
+const BlockView = require('./block_view');
 
 const createBoard = function(width, height){
   let grid = new Array(height);
@@ -14,9 +15,10 @@ const createBoard = function(width, height){
   return grid;
 };
 
-const Board = function(width, height){
+const Board = function(width, height, game){
   this.width = width;
   this.height = height;
+  this.game = game;
   this.blocks = [];
   this.score = 0;
   $(".score").text(this.score);
@@ -129,11 +131,8 @@ Board.prototype.newTetramino = function(){
   });
   this.score += 100*rowsEliminated*rowsEliminated;
   $('.score').text(this.score);
-  let newTetramino = new Tetramino(this);
-  this.checkGameOver(newTetramino);
-  if(!this.gameOver){
-    this.tetramino = new Tetramino(this);
-  }
+  this.game.newTetramino();
+
 };
 
 module.exports = Board;

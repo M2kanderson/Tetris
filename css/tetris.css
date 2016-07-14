@@ -23,7 +23,7 @@ h1 {
 
 figure {
   display: inline-block;
-  border: 10px solid black;
+  border: 10px solid #0e55a0;
 }
 
 ul:after {
@@ -35,27 +35,102 @@ ul:after {
 li {
   border: 1px solid gray;
   float: left;
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7f7f7+37,e2e2e2+86 */
+  background: #f7f7f7; /* Old browsers */
+  background: -moz-linear-gradient(-45deg,  #f7f7f7 37%, #e2e2e2 86%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg,  #f7f7f7 37%,#e2e2e2 86%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg,  #f7f7f7 37%,#e2e2e2 86%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e2e2e2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+
+.game-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .game-view{
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .game-over{
+  position: absolute;
   display: none;
+  left: 60px;
+  top: 160px;
+  font-size: 24px;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
 }
+
+.pause-menu{
+  display: none;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 12px;
+  height: 300px;
+  width: 200px;
+  position: absolute;
+  left: 50px;
+  top: 100px;
+}
+
+.control{
+  display: flex;
+  justify-content: space-between;;
+  align-items: center;
+}
+
+.control img{
+  margin-left: 20px;
+}
+
+.control p{
+  margin-right: 20px;
+}
+
 .show{
   display: block;
 }
 
 .side-view{
-  width: 100px;
-  height: 460px;
-  background: black;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 200px;
+  height: 557px;
+  background: #0e55a0;
+  padding-right: 10px;
+}
+
+
+.next-block-view{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+  border: 5px solid #0086ee;
+  background: #397fd8;
+}
+
+.next-block{
+  background: transparent;
+  /*border: 0;*/
+}
+
+.score-container{
+  font-size: 24px;
+  color: #e7c026;
+  font-family: 'Bangers', cursive;
+  background: #397fd8;
+  width: 100%;
 }
 
 .red {
