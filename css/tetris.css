@@ -36,8 +36,10 @@ ul:after {
 li {
   border: 1px solid gray;
   float: left;
-  width: 25px;
-  height: 25px;
+  width: calc((100vh - 100px)/20);
+  height: calc((100vh - 100px)/20);
+  min-width: 25px;
+  min-height: 25px;
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7f7f7+37,e2e2e2+86 */
   background: #f7f7f7; /* Old browsers */
   background: -moz-linear-gradient(-45deg,  #f7f7f7 37%, #e2e2e2 86%); /* FF3.6-15 */
@@ -48,9 +50,12 @@ li {
 
 
 .game-container{
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #397fd8;
 }
 
 .game-view{
@@ -58,6 +63,7 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 530px;
 }
 
 .game-over{
@@ -132,11 +138,12 @@ li {
 }
 
 .side-view{
+  height: calc(100vh - 44px);
   display: flex;
   align-items: center;
   flex-direction: column;
   width: 200px;
-  height: 557px;
+  min-height: 557px;
   background: #0e55a0;
   padding-right: 10px;
 }
@@ -164,7 +171,6 @@ li {
   font-size: 24px;
   color: #e7c026;
   font-family: 'Bangers', cursive;
-  background: #397fd8;
   width: 100%;
 }
 
@@ -173,7 +179,6 @@ li {
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 20px;
-  background: #397fd8;
   color: #f7f7f7;
   width: 100%;
 }
