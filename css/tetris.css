@@ -1,0 +1,214 @@
+html, body, figure, figcaption, ul, li, h1, p, h3 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  text-align: inherit;
+  font-family: 'Play', sans-serif;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 60px;
+  margin: 30px;
+}
+
+figure {
+  display: inline-block;
+  border: 10px solid #0e55a0;
+}
+
+ul:after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
+li {
+  border: 1px solid gray;
+  float: left;
+  width: 25px;
+  height: 25px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7f7f7+37,e2e2e2+86 */
+  background: #f7f7f7; /* Old browsers */
+  background: -moz-linear-gradient(-45deg,  #f7f7f7 37%, #e2e2e2 86%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(-45deg,  #f7f7f7 37%,#e2e2e2 86%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(135deg,  #f7f7f7 37%,#e2e2e2 86%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e2e2e2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+
+.game-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-view{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-over{
+  position: absolute;
+  display: none;
+  left: 85px;
+  top: 160px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 24px;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+}
+
+.pause-menu, .start-menu{
+  display: none;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 12px;
+  height: 220px;
+  width: 200px;
+  position: absolute;
+  left: 50px;
+  top: 100px;
+}
+
+.pause-menu h3{
+  padding-top: 4px;
+  padding-bottom: 4px;
+  background-color: #80a2c8;
+  font-size: 20px;
+}
+
+.start-menu h3{
+  padding-top: 4px;
+  padding-bottom: 4px;
+  background-color: #80a2c8;
+
+}
+
+.start-button, .restart-button{
+  cursor: pointer;
+  background-color: #0078ff;
+  color: white;
+  padding: 7px;
+  border: 0;
+  border-radius: 5px;
+}
+
+.start-button:hover{
+  background-color: #3caac0;
+}
+
+.control{
+  display: flex;
+  justify-content: space-between;;
+  align-items: center;
+}
+
+.control img{
+  margin-left: 20px;
+}
+
+.control p{
+  margin-right: 20px;
+}
+
+.show{
+  display: block;
+}
+
+.side-view{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 200px;
+  height: 557px;
+  background: #0e55a0;
+  padding-right: 10px;
+}
+
+
+.next-block-view{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+  border: 5px solid #0086ee;
+  background: #397fd8;
+}
+
+.next-block{
+  background: transparent;
+  /*border: 0;*/
+}
+
+.score-container{
+  margin-top: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 24px;
+  color: #e7c026;
+  font-family: 'Bangers', cursive;
+  background: #397fd8;
+  width: 100%;
+}
+
+.lines-completed-container{
+  margin-top: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 20px;
+  background: #397fd8;
+  color: #f7f7f7;
+  width: 100%;
+}
+
+.red {
+  border: 1px solid black;
+  background: red;
+}
+
+.green {
+  border: 1px solid black;
+  background: green;
+}
+
+.blue {
+  border: 1px solid black;
+  background: blue;
+}
+
+.light-blue{
+  border: 1px solid black;
+  background: lightblue;
+}
+
+.yellow{
+  border: 1px solid black;
+  background: yellow;
+}
+
+.purple{
+  border: 1px solid black;
+  background: purple;
+}
+
+.orange{
+  border: 1px solid black;
+  background: orange;
+}

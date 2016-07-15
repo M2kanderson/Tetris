@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tetris</title>
+    <link rel="stylesheet" type="text/css" href="./css/tetris.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Bangers' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Play' rel='stylesheet' type='text/css'>
+    <script src="./js/bundle.js"></script>
+  </head>
+
+  <body>
+    <div class="game-container">
+      <div class="game-view">
+        <div class="start-menu">
+          <h3>Welcome to
+            <span style="color:red">T</span>
+            <span style="color:orange">E</span>
+            <span style="color:yellow">T</span>
+            <span style="color:green">R</span>
+            <span style="color:blue">I</span>
+            <span style="color:purple">S</span>
+            </h3>
+          <p>Controls:</p>
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520557/Tetris/left-arrow-icon-35895.png">
+            <p> Move Left</p>
+          </div>
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520557/Tetris/right-arrow-icon-35903.png">
+            <p> Move Right</p>
+          </div>
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520162/Tetris/up-arrow-icon-35900.png">
+            <p> Rotate Tetramino</p>
+          </div>
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520213/Tetris/down-arrow-icon-35890.png">
+            <p> Accelerate Down</p>
+          </div>
+
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468521047/Tetris/key-p-of-a-keyboard_318-47999.jpg">
+            <p> Pause/Unpause</p>
+          </div>
+
+          <button class="start-button">Start Game</button>
+        </div>
+        <div class="pause-menu">
+          <h3>Paused!</h3>
+          <p>Controls:</p>
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520557/Tetris/left-arrow-icon-35895.png">
+            <p> Move Left</p>
+          </div>
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520557/Tetris/right-arrow-icon-35903.png">
+            <p> Move Right</p>
+          </div>
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520162/Tetris/up-arrow-icon-35900.png">
+            <p> Rotate Tetramino</p>
+          </div>
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520213/Tetris/down-arrow-icon-35890.png">
+            <p> Accelerate Down</p>
+          </div>
+
+          <div class="control">
+            <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468521047/Tetris/key-p-of-a-keyboard_318-47999.jpg">
+            <p> Pause/Unpause</p>
+          </div>
+
+        </div>
+        <div class="game-over">
+          <p>Game Over!</p>
+        </div>
+
+        <figure class="tetris-game"></figure>
+        <div class="side-view">
+          <img src="http://res.cloudinary.com/pulsr/image/upload/c_scale,w_200/v1468521439/Tetris/Tetris-Logo-7.png" >
+          <div class="next-block-view">
+            <div class=next-blocks></div>
+          </div>
+          <p class="score-container"> Score:
+            <span class="score">0</span>
+          </p>
+          <p class="lines-completed-container"> Lines:
+            <span class="lines">0</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
