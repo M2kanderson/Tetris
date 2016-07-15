@@ -25,7 +25,7 @@ BlockView.prototype.render = function(blocks){
   blocks.forEach((block) => {
     let pos = block.pos;
     let color = block.color;
-    const flatCoord = (pos[0] * 4) + pos[1];
+    const flatCoord = ((pos[0]+1) * 4) + pos[1];
     $li.eq(flatCoord).addClass(color);
 
   });

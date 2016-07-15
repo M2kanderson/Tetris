@@ -8,7 +8,15 @@ const GameView = function($el, game){
   this.board = new Board(10, 20, game);
   this.setupGrid();
   this.paused = false;
+  $(".start-menu").addClass('show');
+  $(".start-button").on("click", this.startGame.bind(this));
+  $(".restart-button").on("click", this.restartGame.bind(this));
+};
 
+GameView.STEP_MILLIS = 500;
+
+GameView.prototype.startGame = function(){
+  $(".start-menu").removeClass('show');
   this.intervalId = window.setInterval(
   this.step.bind(this),
   GameView.STEP_MILLIS
@@ -17,7 +25,11 @@ const GameView = function($el, game){
   $(window).on("keyup", this.handleKeyUpEvent.bind(this));
 };
 
-GameView.STEP_MILLIS = 200;
+GameView.prototype.restartGame = function(){
+  $(".game-over").removeClass('show');
+  this.board.gameOver = false;
+  this.game.newGame();
+};
 
 GameView.prototype.setupGrid = function(){
   let html = "";
@@ -34,14 +46,15 @@ GameView.prototype.setupGrid = function(){
 };
 
 GameView.prototype.step = function(){
-  // console.log(this.board.gameOver());
   if(this.board.gameOver){
     window.clearInterval(this.intervalId);
     window.clearInterval(this.downIntervalId);
     this.downIntervalId = null;
     $(".game-over").addClass("show");
   }
-
+  if(this.board.updateFallSpeed){
+    this.updateFallSpeed();
+  }
   this.board.tetramino.move([1,0]);
   this.render([1,0]);
 };
@@ -56,9 +69,6 @@ GameView.prototype.render = function (delta) {
   this.updateClasses();
 };
 
-// GameView.prototype.newTetramino = function(){
-//   this.game.newTetramino();
-// };
 
 GameView.KEYS = {
   37: "left",
@@ -130,6 +140,54 @@ GameView.prototype.handleKeyEvent = function(event){
       break;
 
   }
+};
+
+GameView.prototype.updateFallSpeed = function(){
+  this.board.updateFallSpeed = false;
+  let stepMillis = 500;
+  let level = Math.floor(this.board.linesCompleted / 10) + 1;
+  console.log(level);
+  switch (level) {
+    case 1:
+    console.log("hit level 1");
+      stepMillis = 500;
+      break;
+    case 2:
+      console.log("hit level 2");
+      stepMillis = 450;
+      break;
+    case 3:
+      stepMillis = 400;
+      break;
+    case 4:
+      stepMillis = 350;
+      break;
+    case 5:
+      stepMillis = 300;
+      break;
+    case 6:
+      stepMillis = 250;
+      break;
+    case 7:
+      stepMillis = 200;
+      break;
+    case 8:
+      stepMillis = 150;
+      break;
+    case 9:
+      stepMillis = 100;
+      break;
+    default:
+      stepMillis = 50;
+      break;
+
+
+  }
+  window.clearInterval(this.intervalId);
+  this.intervalId = window.setInterval(
+  this.step.bind(this),
+  stepMillis
+  );
 };
 
 module.exports = GameView;

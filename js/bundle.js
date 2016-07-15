@@ -44,30 +44,8 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const GameView = __webpack_require__(1);
-	const BlockView = __webpack_require__(5);
-	const Tetramino = __webpack_require__(3);
+	const Tetris = __webpack_require__(6);
 	
-	const Tetris = function(rootEl, blockEl){
-	  this.gameView = new GameView(rootEl, this);
-	  this.blockView = new BlockView(blockEl);
-	  this.currentTetramino = new Tetramino(this.gameView.board);
-	  this.nextTetramino = new Tetramino(this.gameView.board);
-	  this.gameView.board.tetramino = this.currentTetramino;
-	  this.blockView.updateView(this.nextTetramino.blocks[0]);
-	};
-	
-	Tetris.prototype.newTetramino = function(){
-	  let newTetramino = new Tetramino(this.gameView.board);
-	  this.gameView.board.checkGameOver(newTetramino);
-	  if(!this.gameView.board.gameOver){
-	    this.currentTetramino = this.nextTetramino;
-	    this.nextTetramino = newTetramino;
-	  }
-	
-	  this.blockView.updateView(this.nextTetramino.blocks[0]);
-	  this.gameView.board.tetramino = this.currentTetramino;
-	};
 	
 	$(function(){
 	  const rootEl = $('.tetris-game');
@@ -90,7 +68,15 @@
 	  this.board = new Board(10, 20, game);
 	  this.setupGrid();
 	  this.paused = false;
+	  $(".start-menu").addClass('show');
+	  $(".start-button").on("click", this.startGame.bind(this));
+	  $(".restart-button").on("click", this.restartGame.bind(this));
+	};
 	
+	GameView.STEP_MILLIS = 500;
+	
+	GameView.prototype.startGame = function(){
+	  $(".start-menu").removeClass('show');
 	  this.intervalId = window.setInterval(
 	  this.step.bind(this),
 	  GameView.STEP_MILLIS
@@ -99,7 +85,11 @@
 	  $(window).on("keyup", this.handleKeyUpEvent.bind(this));
 	};
 	
-	GameView.STEP_MILLIS = 200;
+	GameView.prototype.restartGame = function(){
+	  $(".game-over").removeClass('show');
+	  this.board.gameOver = false;
+	  this.game.newGame();
+	};
 	
 	GameView.prototype.setupGrid = function(){
 	  let html = "";
@@ -116,14 +106,15 @@
 	};
 	
 	GameView.prototype.step = function(){
-	  // console.log(this.board.gameOver());
 	  if(this.board.gameOver){
 	    window.clearInterval(this.intervalId);
 	    window.clearInterval(this.downIntervalId);
 	    this.downIntervalId = null;
 	    $(".game-over").addClass("show");
 	  }
-	
+	  if(this.board.updateFallSpeed){
+	    this.updateFallSpeed();
+	  }
 	  this.board.tetramino.move([1,0]);
 	  this.render([1,0]);
 	};
@@ -138,9 +129,6 @@
 	  this.updateClasses();
 	};
 	
-	// GameView.prototype.newTetramino = function(){
-	//   this.game.newTetramino();
-	// };
 	
 	GameView.KEYS = {
 	  37: "left",
@@ -214,6 +202,54 @@
 	  }
 	};
 	
+	GameView.prototype.updateFallSpeed = function(){
+	  this.board.updateFallSpeed = false;
+	  let stepMillis = 500;
+	  let level = Math.floor(this.board.linesCompleted / 10) + 1;
+	  console.log(level);
+	  switch (level) {
+	    case 1:
+	    console.log("hit level 1");
+	      stepMillis = 500;
+	      break;
+	    case 2:
+	      console.log("hit level 2");
+	      stepMillis = 450;
+	      break;
+	    case 3:
+	      stepMillis = 400;
+	      break;
+	    case 4:
+	      stepMillis = 350;
+	      break;
+	    case 5:
+	      stepMillis = 300;
+	      break;
+	    case 6:
+	      stepMillis = 250;
+	      break;
+	    case 7:
+	      stepMillis = 200;
+	      break;
+	    case 8:
+	      stepMillis = 150;
+	      break;
+	    case 9:
+	      stepMillis = 100;
+	      break;
+	    default:
+	      stepMillis = 50;
+	      break;
+	
+	
+	  }
+	  window.clearInterval(this.intervalId);
+	  this.intervalId = window.setInterval(
+	  this.step.bind(this),
+	  stepMillis
+	  );
+	};
+	
 	module.exports = GameView;
 
 
@@ -223,7 +259,6 @@
 
 	const Tetramino = __webpack_require__(3);
 	const Block = __webpack_require__(4);
-	const BlockView = __webpack_require__(5);
 	
 	const createBoard = function(width, height){
 	  let grid = new Array(height);
@@ -244,6 +279,8 @@
 	  this.game = game;
 	  this.blocks = [];
 	  this.score = 0;
+	  this.linesCompleted = 0;
+	  this.updateFallSpeed = false;
 	  $(".score").text(this.score);
 	  this.rowCount = {0: 0, 1: 0, 2: 0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0,
 	                  10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0, 18:0, 19:0};
@@ -353,6 +390,12 @@
 	    }
 	  });
 	  this.score += 100*rowsEliminated*rowsEliminated;
+	  this.linesCompleted += rowsEliminated;
+	  if(rowsEliminated > 0 &&
+	    (this.linesCompleted -rowsEliminated) % 10 > this.linesCompleted % 10){
+	    this.updateFallSpeed = true;
+	  }
+	  $('.lines').text(this.linesCompleted);
 	  $('.score').text(this.score);
 	  this.game.newTetramino();
 	
@@ -563,7 +606,7 @@
 	  blocks.forEach((block) => {
 	    let pos = block.pos;
 	    let color = block.color;
-	    const flatCoord = (pos[0] * 4) + pos[1];
+	    const flatCoord = ((pos[0]+1) * 4) + pos[1];
 	    $li.eq(flatCoord).addClass(color);
 	
 	  });
@@ -576,6 +619,49 @@
 	};
 	
 	module.exports = BlockView;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const GameView = __webpack_require__(1);
+	const BlockView = __webpack_require__(5);
+	const Tetramino = __webpack_require__(3);
+	
+	const Tetris = function(rootEl, blockEl){
+	  this.rootEl = rootEl;
+	  this.blockEl = blockEl;
+	  this.gameView = new GameView(rootEl, this);
+	  this.blockView = new BlockView(blockEl);
+	  this.currentTetramino = new Tetramino(this.gameView.board);
+	  this.nextTetramino = new Tetramino(this.gameView.board);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	};
+	
+	Tetris.prototype.newGame = function(){
+	  this.gameView = new GameView(this.rootEl, this);
+	  this.blockView = new BlockView(this.blockEl);
+	  this.currentTetramino = new Tetramino(this.gameView.board);
+	  this.nextTetramino = new Tetramino(this.gameView.board);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	};
+	
+	Tetris.prototype.newTetramino = function(){
+	  let newTetramino = new Tetramino(this.gameView.board);
+	  this.gameView.board.checkGameOver(newTetramino);
+	  if(!this.gameView.board.gameOver){
+	    this.currentTetramino = this.nextTetramino;
+	    this.nextTetramino = newTetramino;
+	  }
+	
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	};
+	
+	module.exports = Tetris;
 
 
 /***/ }
