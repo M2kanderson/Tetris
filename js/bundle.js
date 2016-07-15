@@ -206,14 +206,11 @@
 	  this.board.updateFallSpeed = false;
 	  let stepMillis = 500;
 	  let level = Math.floor(this.board.linesCompleted / 10) + 1;
-	  console.log(level);
 	  switch (level) {
 	    case 1:
-	    console.log("hit level 1");
 	      stepMillis = 500;
 	      break;
 	    case 2:
-	      console.log("hit level 2");
 	      stepMillis = 450;
 	      break;
 	    case 3:
