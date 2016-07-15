@@ -3,6 +3,8 @@
 
 **The classic Tetris game redone in JavaScript and jQuery!**
 
+Check out the live version [here](https://m2kanderson.github.io/).
+
 Tetris is a classic tile-matching puzzle video game. Tetriminos fall from the sky and it is your job to match the variously shaped 4-block pieces so that they form a 10 block horizontal line.  Each time this occurs, your score goes up and thoses lines vanish.  Don't let the blocks hit the top though, or it's game over.
 
 ## How to Play
@@ -14,8 +16,6 @@ will move the Tetrimino quickly to the bottom. As you gain points, the fall spee
 [Left Arrow]:http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520557/Tetris/left-arrow-icon-35895.png
 [Right Arrow]:http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520557/Tetris/right-arrow-icon-35903.png
 [Down Arrow]:http://res.cloudinary.com/pulsr/image/upload/c_scale,h_30/v1468520213/Tetris/down-arrow-icon-35890.png
-
-Check out the live version [here](https://m2kanderson.github.io/).
 
 ## To Do
 
