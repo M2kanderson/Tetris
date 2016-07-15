@@ -22,3 +22,4 @@ will move the Tetrimino quickly to the bottom. As you gain points, the fall spee
 - Add muteable sound including music
 - Allow the user to switch the current piece with the next piece
 - Add more visual flair to create a more entertaining experience
+- Add a leaderboard
