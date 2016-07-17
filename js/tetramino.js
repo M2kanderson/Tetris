@@ -134,10 +134,12 @@ Tetramino.prototype.move = function(vector){
 Tetramino.prototype.rotationCollisions = function(direction){
   let newOrientationBlocks = direction === "right" ?
    this.blocks[1] : this.blocks[this.blocks.length - 1];
+
   return newOrientationBlocks.some((block) =>{
     let pos = [block.pos[0] + this.pos[0], block.pos[1] + this.pos[1]];
     return pos[0] < 0 || pos[1] < 0
-      || pos[0] >= this.board.height || pos[1] >= this.board.width;
+      || pos[0] >= this.board.height || pos[1] >= this.board.width
+      || this.board.rotationCollisionWithBlock(pos);
   });
 };
 

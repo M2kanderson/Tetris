@@ -81,6 +81,12 @@ Board.prototype.collisionWithBlock = function(pos){
 
 };
 
+Board.prototype.rotationCollisionWithBlock = function(pos){
+    return this.blocks.some((block) =>{
+      return block.pos[0] === pos[0] && block.pos[1] === pos[1];
+    });
+};
+
 Board.prototype.withinBounds = function(pos){
   return this.tetramino.blocks[0].every((block) =>{
     let nextBlockPos = [block.pos[0] +pos[0], block.pos[1] + pos[1]];
