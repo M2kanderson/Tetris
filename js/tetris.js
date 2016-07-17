@@ -34,4 +34,16 @@ Tetris.prototype.newTetramino = function(){
   this.gameView.board.tetramino = this.currentTetramino;
 };
 
+Tetris.prototype.swapTetraminos = function(){
+  let currentPos = this.currentTetramino.pos;
+  let nextPos = this.nextTetramino.pos;
+  let pieceToSwapIn = this.nextTetramino;
+  this.nextTetramino = this.currentTetramino;
+  this.nextTetramino.pos = nextPos;
+  this.currentTetramino = pieceToSwapIn;
+  this.currentTetramino.pos = currentPos;
+  this.blockView.updateView(this.nextTetramino.blocks[0]);
+  this.gameView.board.tetramino = this.currentTetramino;
+};
+
 module.exports = Tetris;

@@ -8,6 +8,7 @@ html, body, figure, figcaption, ul, li, h1, p, h3 {
 }
 
 ul {
+  display: flex;
   list-style: none;
 }
 
@@ -23,8 +24,16 @@ h1 {
 }
 
 figure {
-  display: inline-block;
-  border: 10px solid #0e55a0;
+  /*display: inline-block;*/
+  background: #0e55a0;
+  height: 100%;
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 ul:after {
@@ -56,6 +65,7 @@ li {
   justify-content: center;
   align-items: center;
   background: #397fd8;
+  min-height: 540px;
 }
 
 .game-view{
@@ -63,7 +73,9 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 530px;
+  /*min-width: 530px;*/
+  height: 100%;
+  min-height: 540px;
 }
 
 .game-over{
@@ -138,14 +150,20 @@ li {
 }
 
 .side-view{
-  height: calc(100vh - 44px);
+  /*height: calc(100vh - 40px);*/
+  height:100%;
+  min-height: 540px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 200px;
-  min-height: 557px;
+  width: calc(100vh/3);
+  min-width: 200px;
   background: #0e55a0;
   padding-right: 10px;
+}
+
+.side-view img{
+  margin-top: 40px;
 }
 
 
@@ -153,8 +171,10 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 150px;
-  height: 150px;
+  width: calc(100vh/4);
+  height: calc(100vh/4);
+  min-width: 150px;
+  min-height: 150px;
   border: 5px solid #0086ee;
   background: #397fd8;
 }

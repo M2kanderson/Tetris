@@ -75,7 +75,8 @@ GameView.KEYS = {
   39: "right",
   38: "rotate",
   40: "down",
-  80: "pause"
+  80: "pause",
+  32: "swap"
 };
 
 GameView.prototype.handleKeyUpEvent = function(event){
@@ -138,7 +139,8 @@ GameView.prototype.handleKeyEvent = function(event){
       this.togglePause();
 
       break;
-
+    case "swap":
+      this.game.swapTetraminos();
   }
 };
 

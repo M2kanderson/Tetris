@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const Tetris = __webpack_require__(6);
+	const Tetris = __webpack_require__(1);
 	
 	
 	$(function(){
@@ -58,7 +58,62 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const Board = __webpack_require__(2);
+	const GameView = __webpack_require__(2);
+	const BlockView = __webpack_require__(6);
+	const Tetramino = __webpack_require__(4);
+	
+	const Tetris = function(rootEl, blockEl){
+	  this.rootEl = rootEl;
+	  this.blockEl = blockEl;
+	  this.gameView = new GameView(rootEl, this);
+	  this.blockView = new BlockView(blockEl);
+	  this.currentTetramino = new Tetramino(this.gameView.board);
+	  this.nextTetramino = new Tetramino(this.gameView.board);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	};
+	
+	Tetris.prototype.newGame = function(){
+	  this.gameView = new GameView(this.rootEl, this);
+	  this.blockView = new BlockView(this.blockEl);
+	  this.currentTetramino = new Tetramino(this.gameView.board);
+	  this.nextTetramino = new Tetramino(this.gameView.board);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	};
+	
+	Tetris.prototype.newTetramino = function(){
+	  let newTetramino = new Tetramino(this.gameView.board);
+	  this.gameView.board.checkGameOver(newTetramino);
+	  if(!this.gameView.board.gameOver){
+	    this.currentTetramino = this.nextTetramino;
+	    this.nextTetramino = newTetramino;
+	  }
+	
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	};
+	
+	Tetris.prototype.swapTetraminos = function(){
+	  let currentPos = this.currentTetramino.pos;
+	  let nextPos = this.nextTetramino.pos;
+	  let pieceToSwapIn = this.nextTetramino;
+	  this.nextTetramino = this.currentTetramino;
+	  this.nextTetramino.pos = nextPos;
+	  this.currentTetramino = pieceToSwapIn;
+	  this.currentTetramino.pos = currentPos;
+	  this.blockView.updateView(this.nextTetramino.blocks[0]);
+	  this.gameView.board.tetramino = this.currentTetramino;
+	};
+	
+	module.exports = Tetris;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const Board = __webpack_require__(3);
 	
 	
 	
@@ -135,7 +190,8 @@
 	  39: "right",
 	  38: "rotate",
 	  40: "down",
-	  80: "pause"
+	  80: "pause",
+	  32: "swap"
 	};
 	
 	GameView.prototype.handleKeyUpEvent = function(event){
@@ -198,7 +254,8 @@
 	      this.togglePause();
 	
 	      break;
-	
+	    case "swap":
+	      this.game.swapTetraminos();
 	  }
 	};
 	
@@ -251,11 +308,11 @@
 
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const Tetramino = __webpack_require__(3);
-	const Block = __webpack_require__(4);
+	const Tetramino = __webpack_require__(4);
+	const Block = __webpack_require__(5);
 	
 	const createBoard = function(width, height){
 	  let grid = new Array(height);
@@ -402,10 +459,10 @@
 
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const Block = __webpack_require__(4);
+	const Block = __webpack_require__(5);
 	
 	
 	const POSS_TETRAMINOS = {
@@ -561,7 +618,7 @@
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	const Block = function(pos, color){
@@ -573,7 +630,7 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	
@@ -616,49 +673,6 @@
 	};
 	
 	module.exports = BlockView;
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	const GameView = __webpack_require__(1);
-	const BlockView = __webpack_require__(5);
-	const Tetramino = __webpack_require__(3);
-	
-	const Tetris = function(rootEl, blockEl){
-	  this.rootEl = rootEl;
-	  this.blockEl = blockEl;
-	  this.gameView = new GameView(rootEl, this);
-	  this.blockView = new BlockView(blockEl);
-	  this.currentTetramino = new Tetramino(this.gameView.board);
-	  this.nextTetramino = new Tetramino(this.gameView.board);
-	  this.gameView.board.tetramino = this.currentTetramino;
-	  this.blockView.updateView(this.nextTetramino.blocks[0]);
-	};
-	
-	Tetris.prototype.newGame = function(){
-	  this.gameView = new GameView(this.rootEl, this);
-	  this.blockView = new BlockView(this.blockEl);
-	  this.currentTetramino = new Tetramino(this.gameView.board);
-	  this.nextTetramino = new Tetramino(this.gameView.board);
-	  this.gameView.board.tetramino = this.currentTetramino;
-	  this.blockView.updateView(this.nextTetramino.blocks[0]);
-	};
-	
-	Tetris.prototype.newTetramino = function(){
-	  let newTetramino = new Tetramino(this.gameView.board);
-	  this.gameView.board.checkGameOver(newTetramino);
-	  if(!this.gameView.board.gameOver){
-	    this.currentTetramino = this.nextTetramino;
-	    this.nextTetramino = newTetramino;
-	  }
-	
-	  this.blockView.updateView(this.nextTetramino.blocks[0]);
-	  this.gameView.board.tetramino = this.currentTetramino;
-	};
-	
-	module.exports = Tetris;
 
 
 /***/ }
