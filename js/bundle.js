@@ -171,7 +171,7 @@
 	    this.updateFallSpeed();
 	  }
 	  this.board.tetramino.move([1,0]);
-	  this.render([1,0]);
+	  this.render();
 	};
 	
 	GameView.prototype.updateClasses = function() {
@@ -180,7 +180,7 @@
 	
 	};
 	
-	GameView.prototype.render = function (delta) {
+	GameView.prototype.render = function () {
 	  this.updateClasses();
 	};
 	
@@ -188,10 +188,11 @@
 	GameView.KEYS = {
 	  37: "left",
 	  39: "right",
-	  38: "rotate",
+	  38: "rotateRight",
 	  40: "down",
 	  80: "pause",
-	  32: "swap"
+	  32: "swap",
+	  90: "rotateLeft"
 	};
 	
 	GameView.prototype.handleKeyUpEvent = function(event){
@@ -235,10 +236,18 @@
 	        this.render([0,1]);
 	      }
 	      break;
-	    case "rotate":
+	    case "rotateRight":
 	      event.preventDefault();
 	      if(!this.paused){
 	        this.board.tetramino.rotate();
+	        this.render();
+	      }
+	      break;
+	    case "rotateLeft":
+	      event.preventDefault();
+	      if(!this.paused){
+	        this.board.tetramino.rotateLeft();
+	        this.render();
 	      }
 	      break;
 	    case "down":
@@ -595,8 +604,9 @@
 	  }
 	};
 	
-	Tetramino.prototype.rotationCollisions = function(){
-	  let newOrientationBlocks = this.blocks[1];
+	Tetramino.prototype.rotationCollisions = function(direction){
+	  let newOrientationBlocks = direction === "right" ?
+	   this.blocks[1] : this.blocks[this.blocks.length - 1];
 	  return newOrientationBlocks.some((block) =>{
 	    let pos = [block.pos[0] + this.pos[0], block.pos[1] + this.pos[1]];
 	    return pos[0] < 0 || pos[1] < 0
@@ -605,9 +615,17 @@
 	};
 	
 	Tetramino.prototype.rotate = function(){
-	  if(!this.rotationCollisions())
+	  if(!this.rotationCollisions("right"))
 	  {
 	    this.blocks.push(this.blocks.shift());
+	  }
+	
+	};
+	
+	Tetramino.prototype.rotateLeft = function(){
+	  if(!this.rotationCollisions("left"))
+	  {
+	    this.blocks.unshift(this.blocks.pop());
 	  }
 	
 	};

@@ -97,7 +97,7 @@ li {
   background-color: rgba(0,0,0,0.5);
   color: white;
   font-size: 12px;
-  height: 220px;
+  height: 275px;
   width: 200px;
   position: absolute;
   left: 50px;
@@ -135,10 +135,11 @@ li {
   display: flex;
   justify-content: space-between;;
   align-items: center;
+  margin-bottom: 5px;
 }
 
 .control img{
-  margin-left: 20px;
+  margin-left: 15px;
 }
 
 .control p{

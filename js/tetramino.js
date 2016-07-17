@@ -131,8 +131,9 @@ Tetramino.prototype.move = function(vector){
   }
 };
 
-Tetramino.prototype.rotationCollisions = function(){
-  let newOrientationBlocks = this.blocks[1];
+Tetramino.prototype.rotationCollisions = function(direction){
+  let newOrientationBlocks = direction === "right" ?
+   this.blocks[1] : this.blocks[this.blocks.length - 1];
   return newOrientationBlocks.some((block) =>{
     let pos = [block.pos[0] + this.pos[0], block.pos[1] + this.pos[1]];
     return pos[0] < 0 || pos[1] < 0
@@ -141,9 +142,17 @@ Tetramino.prototype.rotationCollisions = function(){
 };
 
 Tetramino.prototype.rotate = function(){
-  if(!this.rotationCollisions())
+  if(!this.rotationCollisions("right"))
   {
     this.blocks.push(this.blocks.shift());
+  }
+
+};
+
+Tetramino.prototype.rotateLeft = function(){
+  if(!this.rotationCollisions("left"))
+  {
+    this.blocks.unshift(this.blocks.pop());
   }
 
 };

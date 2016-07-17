@@ -56,7 +56,7 @@ GameView.prototype.step = function(){
     this.updateFallSpeed();
   }
   this.board.tetramino.move([1,0]);
-  this.render([1,0]);
+  this.render();
 };
 
 GameView.prototype.updateClasses = function() {
@@ -65,7 +65,7 @@ GameView.prototype.updateClasses = function() {
 
 };
 
-GameView.prototype.render = function (delta) {
+GameView.prototype.render = function () {
   this.updateClasses();
 };
 
@@ -73,10 +73,11 @@ GameView.prototype.render = function (delta) {
 GameView.KEYS = {
   37: "left",
   39: "right",
-  38: "rotate",
+  38: "rotateRight",
   40: "down",
   80: "pause",
-  32: "swap"
+  32: "swap",
+  90: "rotateLeft"
 };
 
 GameView.prototype.handleKeyUpEvent = function(event){
@@ -120,10 +121,18 @@ GameView.prototype.handleKeyEvent = function(event){
         this.render([0,1]);
       }
       break;
-    case "rotate":
+    case "rotateRight":
       event.preventDefault();
       if(!this.paused){
         this.board.tetramino.rotate();
+        this.render();
+      }
+      break;
+    case "rotateLeft":
+      event.preventDefault();
+      if(!this.paused){
+        this.board.tetramino.rotateLeft();
+        this.render();
       }
       break;
     case "down":
