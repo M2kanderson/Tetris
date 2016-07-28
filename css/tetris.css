@@ -238,3 +238,8 @@ li {
   border: 1px solid black;
   background: orange;
 }
+
+.gray{
+  border: 1px solid black;
+  background: gray;
+}

@@ -46,17 +46,20 @@ GameView.prototype.setupGrid = function(){
 };
 
 GameView.prototype.step = function(){
-  if(this.board.gameOver){
-    window.clearInterval(this.intervalId);
-    window.clearInterval(this.downIntervalId);
-    this.downIntervalId = null;
-    $(".game-over").addClass("show");
+  if(!this.paused){
+    if(this.board.gameOver){
+      window.clearInterval(this.intervalId);
+      window.clearInterval(this.downIntervalId);
+      this.downIntervalId = null;
+      $(".game-over").addClass("show");
+    }
+    if(this.board.updateFallSpeed){
+      this.updateFallSpeed();
+    }
+    this.board.tetramino.move([1,0]);
+    this.render();
   }
-  if(this.board.updateFallSpeed){
-    this.updateFallSpeed();
-  }
-  this.board.tetramino.move([1,0]);
-  this.render();
+
 };
 
 GameView.prototype.updateClasses = function() {
@@ -66,7 +69,10 @@ GameView.prototype.updateClasses = function() {
 };
 
 GameView.prototype.render = function () {
-  this.updateClasses();
+  if(!this.paused){
+    this.updateClasses();
+  }
+
 };
 
 
@@ -109,28 +115,28 @@ GameView.prototype.handleKeyEvent = function(event){
   switch (GameView.KEYS[event.keyCode]) {
     case "left":
       event.preventDefault();
-      if(!this.paused){
+      if(!this.paused && !this.board.gameOver){
         this.board.tetramino.move([0,-1]);
         this.render([0,-1]);
       }
       break;
     case "right":
       event.preventDefault();
-      if(!this.paused){
+      if(!this.paused && !this.board.gameOver){
         this.board.tetramino.move([0,1]);
         this.render([0,1]);
       }
       break;
     case "rotateRight":
       event.preventDefault();
-      if(!this.paused){
+      if(!this.paused && !this.board.gameOver){
         this.board.tetramino.rotate();
         this.render();
       }
       break;
     case "rotateLeft":
       event.preventDefault();
-      if(!this.paused){
+      if(!this.paused && !this.board.gameOver){
         this.board.tetramino.rotateLeft();
         this.render();
       }
@@ -145,11 +151,15 @@ GameView.prototype.handleKeyEvent = function(event){
       }
       break;
     case "pause":
-      this.togglePause();
-
+      if(!this.board.gameOver){
+        this.togglePause();
+      }
       break;
     case "swap":
-      this.game.swapTetraminos();
+      if(!this.board.gameOver)
+      {
+        this.game.swapTetraminos();
+      }
   }
 };
 

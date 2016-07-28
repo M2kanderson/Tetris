@@ -161,17 +161,20 @@
 	};
 	
 	GameView.prototype.step = function(){
-	  if(this.board.gameOver){
-	    window.clearInterval(this.intervalId);
-	    window.clearInterval(this.downIntervalId);
-	    this.downIntervalId = null;
-	    $(".game-over").addClass("show");
+	  if(!this.paused){
+	    if(this.board.gameOver){
+	      window.clearInterval(this.intervalId);
+	      window.clearInterval(this.downIntervalId);
+	      this.downIntervalId = null;
+	      $(".game-over").addClass("show");
+	    }
+	    if(this.board.updateFallSpeed){
+	      this.updateFallSpeed();
+	    }
+	    this.board.tetramino.move([1,0]);
+	    this.render();
 	  }
-	  if(this.board.updateFallSpeed){
-	    this.updateFallSpeed();
-	  }
-	  this.board.tetramino.move([1,0]);
-	  this.render();
+	
 	};
 	
 	GameView.prototype.updateClasses = function() {
@@ -181,7 +184,10 @@
 	};
 	
 	GameView.prototype.render = function () {
-	  this.updateClasses();
+	  if(!this.paused){
+	    this.updateClasses();
+	  }
+	
 	};
 	
 	
@@ -224,28 +230,28 @@
 	  switch (GameView.KEYS[event.keyCode]) {
 	    case "left":
 	      event.preventDefault();
-	      if(!this.paused){
+	      if(!this.paused && !this.board.gameOver){
 	        this.board.tetramino.move([0,-1]);
 	        this.render([0,-1]);
 	      }
 	      break;
 	    case "right":
 	      event.preventDefault();
-	      if(!this.paused){
+	      if(!this.paused && !this.board.gameOver){
 	        this.board.tetramino.move([0,1]);
 	        this.render([0,1]);
 	      }
 	      break;
 	    case "rotateRight":
 	      event.preventDefault();
-	      if(!this.paused){
+	      if(!this.paused && !this.board.gameOver){
 	        this.board.tetramino.rotate();
 	        this.render();
 	      }
 	      break;
 	    case "rotateLeft":
 	      event.preventDefault();
-	      if(!this.paused){
+	      if(!this.paused && !this.board.gameOver){
 	        this.board.tetramino.rotateLeft();
 	        this.render();
 	      }
@@ -260,11 +266,15 @@
 	      }
 	      break;
 	    case "pause":
-	      this.togglePause();
-	
+	      if(!this.board.gameOver){
+	        this.togglePause();
+	      }
 	      break;
 	    case "swap":
-	      this.game.swapTetraminos();
+	      if(!this.board.gameOver)
+	      {
+	        this.game.swapTetraminos();
+	      }
 	  }
 	};
 	
@@ -344,6 +354,8 @@
 	  this.score = 0;
 	  this.linesCompleted = 0;
 	  this.updateFallSpeed = false;
+	  this.removingRows = false;
+	  this.rowsEliminated = {};
 	  $(".score").text(this.score);
 	  this.rowCount = {0: 0, 1: 0, 2: 0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0,
 	                  10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0, 18:0, 19:0};
@@ -358,6 +370,23 @@
 	    let pos = block.pos;
 	    let color = block.color;
 	    const flatCoord = (pos[0] * this.width) + pos[1];
+	    $li.eq(flatCoord).addClass(color);
+	  });
+	};
+	
+	Board.prototype.flashRemovedRows = function($el){
+	  let $li = $el.find("li");
+	  $li.removeClass();
+	  this.blocks.forEach((block) => {
+	    let color;
+	    if(this.rowsEliminated[block.pos[0]]){
+	      color = "gray";
+	    } else{
+	      color = block.color;
+	    }
+	    // debugger;
+	    // let pos = block.pos;
+	    const flatCoord = (block.pos[0] * this.width) + block.pos[1];
 	    $li.eq(flatCoord).addClass(color);
 	  });
 	};
@@ -450,23 +479,42 @@
 	
 	Board.prototype.newTetramino = function(){
 	  this.addBlocks();
-	  let rowsEliminated = 0;
+	  let rowsEliminated = [];
 	  Object.keys(this.rowCount).forEach((row) =>{
 	    if(parseInt(this.rowCount[row]) >= this.width){
-	      rowsEliminated += 1;
+	      this.rowsEliminated[row]= true;
 	      // window.setTimeout(this.removeRow.bind(parseInt(row)), 700);
-	      this.removeRow(parseInt(row));
 	    }
 	  });
-	  this.score += 100*rowsEliminated*rowsEliminated;
-	  this.linesCompleted += rowsEliminated;
-	  if(rowsEliminated > 0 &&
-	    (this.linesCompleted -rowsEliminated) % 10 > this.linesCompleted % 10){
-	    this.updateFallSpeed = true;
+	  let rowElimCount = Object.keys(this.rowsEliminated).length;
+	  if(rowElimCount > 0){
+	    this.removingRows = true;
 	  }
-	  $('.lines').text(this.linesCompleted);
-	  $('.score').text(this.score);
-	  this.game.newTetramino();
+	  if(this.removingRows){
+	    this.game.gameView.paused = true;
+	    this.flashRemovedRows(this.game.rootEl);
+	    window.setTimeout(()=>{
+	      Object.keys(this.rowsEliminated).forEach((row) =>{
+	        this.removeRow(parseInt(row));
+	      });
+	      this.game.gameView.paused = false;
+	      this.removingRows = false;
+	      this.rowsEliminated = {};
+	
+	      this.score += 100*rowElimCount*rowElimCount;
+	      this.linesCompleted += rowElimCount;
+	      if(rowElimCount > 0 &&
+	        (this.linesCompleted - rowElimCount) % 10 > this.linesCompleted % 10){
+	        this.updateFallSpeed = true;
+	      }
+	      $('.lines').text(this.linesCompleted);
+	      $('.score').text(this.score);
+	      this.game.newTetramino();
+	    }, 600);
+	  } else {
+	    this.game.newTetramino();
+	  }
+	
 	
 	};
 	
@@ -695,7 +743,6 @@
 	BlockView.prototype.updateView = function(blocks) {
 	  this.$li.removeClass();
 	  this.render(blocks);
-	
 	};
 	
 	module.exports = BlockView;

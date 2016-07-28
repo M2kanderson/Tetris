@@ -34,7 +34,6 @@ BlockView.prototype.render = function(blocks){
 BlockView.prototype.updateView = function(blocks) {
   this.$li.removeClass();
   this.render(blocks);
-
 };
 
 module.exports = BlockView;
