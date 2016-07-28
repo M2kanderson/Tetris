@@ -20,6 +20,7 @@ body {
   display: flex;
   align-items: center;
   background: #397fd8;
+  justify-content: center;
 }
 
 h1 {
