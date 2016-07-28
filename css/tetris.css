@@ -17,6 +17,9 @@ body {
   font-family: sans-serif;
   text-align: center;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  background: #397fd8;
 }
 
 h1 {
@@ -58,10 +61,18 @@ li {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e2e2e2',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
+.controls-side-panel{
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
 
+.z-key{
+  border-radius: 5px;
+}
 .game-container{
   height: 100vh;
-  width: 100vw;
+  /*width: 100vw;*/
   display: flex;
   justify-content: center;
   align-items: center;
