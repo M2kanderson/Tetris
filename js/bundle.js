@@ -274,6 +274,7 @@
 	      if(!this.board.gameOver)
 	      {
 	        this.game.swapTetraminos();
+	        this.render();
 	      }
 	  }
 	};

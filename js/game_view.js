@@ -159,6 +159,7 @@ GameView.prototype.handleKeyEvent = function(event){
       if(!this.board.gameOver)
       {
         this.game.swapTetraminos();
+        this.render();
       }
   }
 };
