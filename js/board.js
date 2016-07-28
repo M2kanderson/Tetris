@@ -178,7 +178,7 @@ Board.prototype.newTetramino = function(){
       $('.lines').text(this.linesCompleted);
       $('.score').text(this.score);
       this.game.newTetramino();
-    }, 600);
+    }, 300);
   } else {
     this.game.newTetramino();
   }

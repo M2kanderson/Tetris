@@ -10,6 +10,7 @@ html, body, figure, figcaption, ul, li, h1, p, h3 {
 ul {
   display: flex;
   list-style: none;
+  background: white;
 }
 
 body {
@@ -242,4 +243,7 @@ li {
 .gray{
   border: 1px solid black;
   background: gray;
+  animation: blinker 0.15s cubic-bezier(.5, 0, 1, 1) infinite alternate;
 }
+
+@keyframes blinker { to { opacity: 0; } }
